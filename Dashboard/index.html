@@ -31,6 +31,45 @@
         </div>
       </section>
 
+      <section class="control-panel" aria-label="Dashboard theme selector">
+        <h2>Dashboard Theme</h2>
+        <div class="theme-presets">
+          <button
+            class="theme-chip is-active"
+            type="button"
+            data-theme="signal"
+            aria-pressed="true"
+          >
+            Signal Core
+          </button>
+          <button class="theme-chip" type="button" data-theme="aurora" aria-pressed="false">
+            Aurora Drive
+          </button>
+          <button class="theme-chip" type="button" data-theme="ember" aria-pressed="false">
+            Ember Forge
+          </button>
+          <button class="theme-chip" type="button" data-theme="terminal" aria-pressed="false">
+            Terminal Wave
+          </button>
+        </div>
+        <div class="custom-theme">
+          <label for="customAccent">Craft your own accent</label>
+          <input
+            type="color"
+            id="customAccent"
+            name="customAccent"
+            value="#00f5d4"
+            aria-describedby="customThemeHint"
+          />
+          <button type="button" id="applyCustomTheme" aria-pressed="false">
+            Apply Custom Theme
+          </button>
+          <p id="customThemeHint" class="visually-hidden">
+            Choose a color to generate a custom dashboard theme.
+          </p>
+        </div>
+      </section>
+
       <section class="grid" aria-label="Applet launch bay">
         <article class="slot">
           <h2>Slot A</h2>
