@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
 :root {
-  color-scheme: dark;
+  --color-scheme: dark;
+  color-scheme: var(--color-scheme, dark);
   font-family: 'Share Tech Mono', 'IBM Plex Mono', 'Menlo', monospace;
 
   --bg: #050608;
@@ -34,6 +35,10 @@
   --footer-muted: rgba(230, 247, 255, 0.45);
   --scanline: rgba(0, 245, 212, 0.08);
   --noise-opacity: 0.15;
+}
+
+[hidden] {
+  display: none !important;
 }
 
 * {
@@ -80,6 +85,12 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
+}
+
+.banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .logo {
@@ -136,6 +147,36 @@ body {
   box-shadow: 0 0 24px var(--sound-active-shadow);
 }
 
+.settings-toggle {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--slot-border);
+  cursor: pointer;
+  transition: border 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.settings-toggle:hover,
+.settings-toggle:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 16px var(--sound-shadow);
+  transform: translateY(-1px);
+}
+
+.settings-toggle.is-active {
+  border-color: var(--accent-secondary);
+  box-shadow: 0 0 22px var(--sound-active-shadow);
+}
+
+.settings-icon {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
 .hero {
   position: relative;
   min-height: clamp(220px, 28vw, 320px);
@@ -170,21 +211,80 @@ body {
   box-shadow: 0 0 22px var(--shell-shadow);
 }
 
-.control-panel {
-  display: grid;
-  gap: 1rem;
-  border: 1px solid var(--grid-line);
-  padding: 1.25rem;
-  background: var(--panel-bg);
-  background: color-mix(in srgb, var(--panel-bg) 88%, transparent);
+.settings-overlay {
+  position: absolute;
+  inset: clamp(1rem, 3vw, 3rem);
+  background: rgba(5, 10, 18, 0.55);
+  backdrop-filter: blur(3px);
+  border-radius: 18px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 8;
 }
 
-.control-panel h2 {
-  font-size: 0.95rem;
-  letter-spacing: 0.28em;
+.settings-overlay.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.settings-panel {
+  position: absolute;
+  top: clamp(1.25rem, 3vw, 2.25rem);
+  right: clamp(1.25rem, 4vw, 2.75rem);
+  width: min(360px, calc(100% - clamp(2.5rem, 6vw, 4.5rem)));
+  z-index: 12;
+  opacity: 0;
+  transform: translateY(-12px) scale(0.96);
+  transition: opacity 0.24s ease, transform 0.24s ease;
+  pointer-events: none;
+}
+
+.settings-panel.is-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.control-panel {
+  display: grid;
+  gap: 1.25rem;
+  border: 1px solid var(--grid-line);
+  padding: 1.35rem;
+  background: var(--panel-bg);
+  background: color-mix(in srgb, var(--panel-bg) 92%, transparent);
+  box-shadow: 0 24px 45px var(--shell-shadow);
+  border-radius: 18px;
+}
+
+.settings-panel__header {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.settings-panel__header h2 {
+  font-size: 0.75rem;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-bottom: 0.25rem;
+}
+
+.settings-panel__header p {
+  font-size: 0.72rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.settings-section {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.settings-section h3 {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 .theme-presets {
@@ -264,6 +364,12 @@ body {
 .custom-theme button.is-active {
   border-color: var(--accent-secondary);
   box-shadow: 0 0 16px var(--sound-active-shadow);
+}
+
+.settings-hint {
+  font-size: 0.68rem;
+  color: var(--muted);
+  line-height: 1.4;
 }
 
 .grid {
@@ -354,8 +460,24 @@ body {
     align-self: stretch;
   }
 
+  .banner-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
   .custom-theme {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .settings-panel {
+    left: clamp(1rem, 4vw, 2rem);
+    right: clamp(1rem, 4vw, 2rem);
+    width: auto;
+  }
+
+  .settings-overlay {
+    inset: clamp(0.75rem, 4vw, 2rem);
+    border-radius: 14px;
   }
 }

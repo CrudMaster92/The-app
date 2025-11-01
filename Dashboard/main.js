@@ -4,6 +4,7 @@ const stars = [];
 const STAR_COUNT = 180;
 let animationFrame;
 let starFillStyle = 'rgba(0, 200, 255, 0.8)';
+let settingsHideTimer;
 
 function resizeCanvas() {
   const ratio = window.devicePixelRatio || 1;
@@ -206,6 +207,7 @@ function createThemeFromAccent(accentHex) {
   const secondary = adjustLightness(accent, -0.18);
   const highlight = adjustLightness(accent, 0.18);
   return {
+    '--color-scheme': 'dark',
     '--bg': '#050608',
     '--shell-bg': 'rgba(2, 6, 12, 0.78)',
     '--shell-border': withAlpha(accent, 0.2),
@@ -238,6 +240,7 @@ const themePresets = {
   signal: {
     label: 'Signal Core',
     values: {
+      '--color-scheme': 'dark',
       '--bg': '#050608',
       '--shell-bg': 'rgba(2, 6, 12, 0.78)',
       '--shell-border': 'rgba(0, 245, 212, 0.2)',
@@ -268,6 +271,7 @@ const themePresets = {
   aurora: {
     label: 'Aurora Drive',
     values: {
+      '--color-scheme': 'dark',
       '--bg': '#03060D',
       '--shell-bg': 'rgba(6, 10, 24, 0.82)',
       '--shell-border': 'rgba(112, 173, 255, 0.24)',
@@ -298,6 +302,7 @@ const themePresets = {
   ember: {
     label: 'Ember Forge',
     values: {
+      '--color-scheme': 'dark',
       '--bg': '#0D0403',
       '--shell-bg': 'rgba(26, 10, 6, 0.85)',
       '--shell-border': 'rgba(255, 126, 95, 0.24)',
@@ -328,6 +333,7 @@ const themePresets = {
   terminal: {
     label: 'Terminal Wave',
     values: {
+      '--color-scheme': 'dark',
       '--bg': '#020502',
       '--shell-bg': 'rgba(4, 12, 4, 0.85)',
       '--shell-border': 'rgba(94, 252, 141, 0.22)',
@@ -355,6 +361,37 @@ const themePresets = {
       '--noise-opacity': '0.18',
     },
   },
+  minimal: {
+    label: 'Monochrome Light',
+    values: {
+      '--color-scheme': 'light',
+      '--bg': '#F6F7F8',
+      '--shell-bg': 'rgba(255, 255, 255, 0.92)',
+      '--shell-border': 'rgba(12, 12, 12, 0.08)',
+      '--shell-shadow': 'rgba(12, 12, 12, 0.18)',
+      '--accent': '#121212',
+      '--accent-secondary': '#2C2C2C',
+      '--accent-soft': 'rgba(12, 12, 12, 0.08)',
+      '--logo-inner-glow': 'rgba(12, 12, 12, 0.12)',
+      '--logo-outer-glow': 'rgba(12, 12, 12, 0.16)',
+      '--logo-bg-start': 'rgba(12, 12, 12, 0.05)',
+      '--logo-bg-end': 'rgba(12, 12, 12, 0.02)',
+      '--sound-border': 'rgba(12, 12, 12, 0.18)',
+      '--sound-shadow': 'rgba(12, 12, 12, 0.12)',
+      '--sound-active-border': 'rgba(12, 12, 12, 0.28)',
+      '--sound-active-shadow': 'rgba(12, 12, 12, 0.2)',
+      '--panel-bg': 'rgba(255, 255, 255, 0.94)',
+      '--hero-overlay': 'rgba(12, 12, 12, 0.06)',
+      '--text': '#0C0C0C',
+      '--muted': 'rgba(18, 18, 18, 0.62)',
+      '--grid-line': 'rgba(12, 12, 12, 0.12)',
+      '--slot-bg': 'rgba(255, 255, 255, 0.86)',
+      '--slot-border': 'rgba(12, 12, 12, 0.12)',
+      '--footer-muted': 'rgba(18, 18, 18, 0.5)',
+      '--scanline': 'rgba(12, 12, 12, 0.06)',
+      '--noise-opacity': '0.08',
+    },
+  },
 };
 
 const THEME_STORAGE_KEY = 'dashboardThemeSelection';
@@ -362,6 +399,9 @@ const root = document.documentElement;
 const themeButtons = Array.from(document.querySelectorAll('.theme-chip'));
 const customAccentInput = document.getElementById('customAccent');
 const customApplyButton = document.getElementById('applyCustomTheme');
+const settingsToggle = document.getElementById('settingsToggle');
+const settingsPanel = document.getElementById('settingsPanel');
+const settingsBackdrop = document.getElementById('settingsBackdrop');
 
 function saveThemeSelection(data) {
   if (typeof window === 'undefined' || !window.localStorage) return;
@@ -413,6 +453,117 @@ function applyTheme(themeValues, { activeId = null, isCustom = false, persist = 
   }
 }
 
+function finalizeSettingsVisibility() {
+  if (settingsPanel && !settingsPanel.classList.contains('is-open')) {
+    settingsPanel.hidden = true;
+  }
+  if (settingsBackdrop && !settingsBackdrop.classList.contains('is-visible')) {
+    settingsBackdrop.hidden = true;
+  }
+}
+
+function openSettingsPanel() {
+  if (!settingsPanel || settingsPanel.classList.contains('is-open')) return;
+  clearTimeout(settingsHideTimer);
+  settingsPanel.hidden = false;
+  if (settingsBackdrop) {
+    settingsBackdrop.hidden = false;
+  }
+  requestAnimationFrame(() => {
+    settingsPanel.classList.add('is-open');
+    if (settingsBackdrop) {
+      settingsBackdrop.classList.add('is-visible');
+    }
+  });
+  if (settingsToggle) {
+    settingsToggle.setAttribute('aria-expanded', 'true');
+    settingsToggle.classList.add('is-active');
+  }
+}
+
+function closeSettingsPanel({ immediate = false } = {}) {
+  if (!settingsPanel || settingsPanel.hidden) return;
+  if (settingsToggle) {
+    settingsToggle.setAttribute('aria-expanded', 'false');
+    settingsToggle.classList.remove('is-active');
+  }
+  const performClose = () => {
+    finalizeSettingsVisibility();
+  };
+
+  if (immediate) {
+    settingsPanel.classList.remove('is-open');
+    if (settingsBackdrop) {
+      settingsBackdrop.classList.remove('is-visible');
+    }
+    performClose();
+    return;
+  }
+
+  settingsPanel.classList.remove('is-open');
+  if (settingsBackdrop) {
+    settingsBackdrop.classList.remove('is-visible');
+  }
+
+  const handlePanelTransition = (event) => {
+    if (event.target !== settingsPanel) return;
+    settingsPanel.removeEventListener('transitionend', handlePanelTransition);
+    performClose();
+  };
+  settingsPanel.addEventListener('transitionend', handlePanelTransition);
+
+  if (settingsBackdrop) {
+    const handleBackdropTransition = (event) => {
+      if (event.target !== settingsBackdrop) return;
+      settingsBackdrop.removeEventListener('transitionend', handleBackdropTransition);
+      performClose();
+    };
+    settingsBackdrop.addEventListener('transitionend', handleBackdropTransition);
+  }
+
+  clearTimeout(settingsHideTimer);
+  settingsHideTimer = setTimeout(() => {
+    performClose();
+  }, 280);
+}
+
+function toggleSettingsPanel() {
+  if (!settingsPanel) return;
+  if (settingsPanel.hidden || !settingsPanel.classList.contains('is-open')) {
+    openSettingsPanel();
+  } else {
+    closeSettingsPanel();
+  }
+}
+
+function initializeSettingsMenu() {
+  if (!settingsToggle || !settingsPanel) return;
+  settingsToggle.addEventListener('click', () => {
+    toggleSettingsPanel();
+  });
+  if (settingsBackdrop) {
+    settingsBackdrop.addEventListener('click', () => {
+      closeSettingsPanel();
+    });
+  }
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !settingsPanel.hidden) {
+      closeSettingsPanel();
+    }
+  });
+}
+
+function setCustomAccent(accent, { skipSave = false } = {}) {
+  const normalized = toHexColor(accent) || accent;
+  if (!normalized) return;
+  const theme = createThemeFromAccent(normalized);
+  applyTheme(theme, {
+    isCustom: true,
+    persist: skipSave ? null : { type: 'custom', accent: normalizeHex(normalized) || normalized },
+    skipSave,
+  });
+}
+
 function initializeThemeControls() {
   if (!themeButtons.length && !customAccentInput) {
     const accent = getComputedStyle(root).getPropertyValue('--accent');
@@ -431,18 +582,7 @@ function initializeThemeControls() {
       skipSave: true,
     });
   } else if (stored?.type === 'custom' && stored.accent) {
-    const customTheme = createThemeFromAccent(stored.accent);
-    applyTheme(customTheme, {
-      isCustom: true,
-      persist: null,
-      skipSave: true,
-    });
-    if (customAccentInput) {
-      const normalizedAccent = toHexColor(stored.accent);
-      if (normalizedAccent) {
-        customAccentInput.value = normalizedAccent;
-      }
-    }
+    setCustomAccent(stored.accent, { skipSave: true });
   } else {
     applyTheme(themePresets.signal.values, {
       activeId: 'signal',
@@ -464,16 +604,20 @@ function initializeThemeControls() {
 
   if (customApplyButton && customAccentInput) {
     customApplyButton.addEventListener('click', () => {
-      const accent = customAccentInput.value;
-      const theme = createThemeFromAccent(accent);
-      applyTheme(theme, {
-        isCustom: true,
-        persist: { type: 'custom', accent: normalizeHex(accent) || accent },
-      });
+      setCustomAccent(customAccentInput.value);
+    });
+
+    customAccentInput.addEventListener('input', () => {
+      setCustomAccent(customAccentInput.value, { skipSave: true });
+    });
+
+    customAccentInput.addEventListener('change', () => {
+      setCustomAccent(customAccentInput.value);
     });
   }
 }
 
+initializeSettingsMenu();
 initializeThemeControls();
 initStarfield();
 
