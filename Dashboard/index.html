@@ -10,6 +10,59 @@
     <div class="noise"></div>
     <div class="scanlines"></div>
     <main class="shell">
+      <div class="settings-overlay" id="settingsBackdrop" hidden aria-hidden="true"></div>
+      <aside class="settings-panel" id="settingsPanel" aria-label="Dashboard settings" hidden>
+        <div class="control-panel">
+          <header class="settings-panel__header">
+            <h2>Dashboard Settings</h2>
+            <p>Choose a preset or craft an accent for the dashboard.</p>
+          </header>
+          <div class="settings-section">
+            <h3>Theme Presets</h3>
+            <div class="theme-presets">
+              <button
+                class="theme-chip is-active"
+                type="button"
+                data-theme="signal"
+                aria-pressed="true"
+              >
+                Signal Core
+              </button>
+              <button class="theme-chip" type="button" data-theme="aurora" aria-pressed="false">
+                Aurora Drive
+              </button>
+              <button class="theme-chip" type="button" data-theme="ember" aria-pressed="false">
+                Ember Forge
+              </button>
+              <button class="theme-chip" type="button" data-theme="terminal" aria-pressed="false">
+                Terminal Wave
+              </button>
+              <button class="theme-chip" type="button" data-theme="minimal" aria-pressed="false">
+                Monochrome Light
+              </button>
+            </div>
+          </div>
+          <div class="settings-section">
+            <h3>Custom Accent</h3>
+            <div class="custom-theme">
+              <label for="customAccent">Accent color</label>
+              <input
+                type="color"
+                id="customAccent"
+                name="customAccent"
+                value="#00f5d4"
+                aria-describedby="customThemeHint"
+              />
+              <button type="button" id="applyCustomTheme" aria-pressed="false">
+                Apply Accent
+              </button>
+            </div>
+            <p id="customThemeHint" class="settings-hint">
+              Adjust the accent to generate a tailored theme.
+            </p>
+          </div>
+        </div>
+      </aside>
       <header class="banner">
         <div class="logo" aria-hidden="true">
           <span class="logo-mark">∑</span>
@@ -18,9 +71,31 @@
           <h1>Signal Override</h1>
           <p class="subtitle">Cracktro Operations Dashboard</p>
         </div>
-        <button class="sound-toggle" id="soundToggle" type="button">
-          Enable Sound
-        </button>
+        <div class="banner-actions">
+          <button class="sound-toggle" id="soundToggle" type="button">
+            Enable Sound
+          </button>
+          <button
+            class="settings-toggle"
+            id="settingsToggle"
+            type="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-controls="settingsPanel"
+          >
+            <span class="visually-hidden">Toggle dashboard settings</span>
+            <svg class="settings-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6">
+                <path d="M4 6.5h16" />
+                <circle cx="9.5" cy="6.5" r="2.5" />
+                <path d="M4 12h16" />
+                <circle cx="14.5" cy="12" r="2.5" />
+                <path d="M4 17.5h16" />
+                <circle cx="7.5" cy="17.5" r="2.5" />
+              </g>
+            </svg>
+          </button>
+        </div>
       </header>
 
       <section class="hero">
@@ -28,45 +103,6 @@
         <div class="hero-copy">
           <p class="intro">Boot sequence locked in.</p>
           <p class="status">Awaiting module injection...</p>
-        </div>
-      </section>
-
-      <section class="control-panel" aria-label="Dashboard theme selector">
-        <h2>Dashboard Theme</h2>
-        <div class="theme-presets">
-          <button
-            class="theme-chip is-active"
-            type="button"
-            data-theme="signal"
-            aria-pressed="true"
-          >
-            Signal Core
-          </button>
-          <button class="theme-chip" type="button" data-theme="aurora" aria-pressed="false">
-            Aurora Drive
-          </button>
-          <button class="theme-chip" type="button" data-theme="ember" aria-pressed="false">
-            Ember Forge
-          </button>
-          <button class="theme-chip" type="button" data-theme="terminal" aria-pressed="false">
-            Terminal Wave
-          </button>
-        </div>
-        <div class="custom-theme">
-          <label for="customAccent">Craft your own accent</label>
-          <input
-            type="color"
-            id="customAccent"
-            name="customAccent"
-            value="#00f5d4"
-            aria-describedby="customThemeHint"
-          />
-          <button type="button" id="applyCustomTheme" aria-pressed="false">
-            Apply Custom Theme
-          </button>
-          <p id="customThemeHint" class="visually-hidden">
-            Choose a color to generate a custom dashboard theme.
-          </p>
         </div>
       </section>
 
