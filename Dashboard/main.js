@@ -712,3 +712,180 @@ if (statusEl) {
     statusEl.style.opacity = visible ? '1' : '0.45';
   }, 900);
 }
+
+// Applet launcher controls
+const workspace = document.querySelector('.workspace');
+const launcherPanel = document.getElementById('launcherPanel');
+const launcherToggle = document.getElementById('toggleLauncher');
+const fullscreenButton = document.getElementById('stageFullscreen');
+const stage = document.getElementById('appletStage');
+const stageTitle = document.getElementById('activeAppletTitle');
+const stageStatus = document.getElementById('activeAppletStatus');
+const stagePlaceholder = document.getElementById('appletPlaceholder');
+const placeholderMessage = document.getElementById('appletPlaceholderMessage');
+const appletFrame = document.getElementById('appletFrame');
+const launcherButtons = Array.from(document.querySelectorAll('.launcher__button'));
+
+let activeAppletId = null;
+let launchersCollapsed = false;
+
+function setLauncherCollapsed(collapsed) {
+  if (!workspace || !launcherToggle) return;
+  launchersCollapsed = collapsed;
+  workspace.classList.toggle('workspace--launchers-hidden', collapsed);
+  if (launcherPanel) {
+    launcherPanel.hidden = collapsed;
+  }
+  launcherToggle.textContent = collapsed ? 'Show Launchers' : 'Hide Launchers';
+  launcherToggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+}
+
+function setActiveLauncherButton(activeButton) {
+  launcherButtons.forEach((button) => {
+    const isActive = button === activeButton;
+    button.classList.toggle('is-active', isActive);
+    button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+  });
+}
+
+function updateStageForSelection(name, description) {
+  if (stageTitle && typeof name === 'string') {
+    stageTitle.textContent = name || 'Applet Screen';
+  }
+  if (stageStatus && typeof description === 'string') {
+    stageStatus.textContent = description || 'Module ready.';
+  }
+}
+
+function prepareStageLoading(name) {
+  if (stageStatus) {
+    stageStatus.textContent = `Initializing ${name}…`;
+  }
+  if (placeholderMessage) {
+    placeholderMessage.textContent = `Initializing ${name}…`;
+  }
+  if (stagePlaceholder) {
+    stagePlaceholder.hidden = false;
+  }
+  if (appletFrame) {
+    appletFrame.hidden = true;
+  }
+}
+
+function handleAppletSelection(button) {
+  if (!button || !stage) return;
+  const name = button.dataset.appletName || 'Applet Screen';
+  const description = button.dataset.appletDesc || 'Module ready.';
+  const url = button.dataset.appletUrl;
+  const appletId = button.dataset.appletId || url || name;
+
+  activeAppletId = appletId;
+  setActiveLauncherButton(button);
+  updateStageForSelection(name, null);
+
+  if (!url) {
+    updateStageForSelection(null, description || 'Module slot unconfigured.');
+    if (placeholderMessage) {
+      placeholderMessage.textContent = 'This slot is awaiting deployment.';
+    }
+    if (stagePlaceholder) {
+      stagePlaceholder.hidden = false;
+    }
+    if (appletFrame) {
+      appletFrame.hidden = true;
+    }
+    return;
+  }
+
+  if (appletFrame && appletFrame.dataset.loadedApplet === appletId) {
+    updateStageForSelection(null, description);
+    if (stagePlaceholder) {
+      stagePlaceholder.hidden = true;
+    }
+    appletFrame.hidden = false;
+    return;
+  }
+
+  if (appletFrame) {
+    prepareStageLoading(name);
+    appletFrame.dataset.targetApplet = appletId;
+    appletFrame.src = url;
+  }
+}
+
+if (launcherToggle) {
+  launcherToggle.addEventListener('click', () => {
+    setLauncherCollapsed(!launchersCollapsed);
+  });
+}
+
+launcherButtons.forEach((button) => {
+  button.setAttribute('aria-pressed', 'false');
+  button.addEventListener('click', () => {
+    handleAppletSelection(button);
+  });
+});
+
+if (appletFrame) {
+  appletFrame.addEventListener('load', () => {
+    if (!activeAppletId) return;
+    const target = appletFrame.dataset.targetApplet;
+    if (target && target !== activeAppletId) {
+      return;
+    }
+    const activeButton = launcherButtons.find((button) => {
+      const id = button.dataset.appletId || button.dataset.appletUrl || button.dataset.appletName;
+      return id === activeAppletId;
+    });
+    const name = activeButton?.dataset.appletName || 'Applet Screen';
+    const description = activeButton?.dataset.appletDesc || 'Module ready.';
+
+    appletFrame.hidden = false;
+    if (stagePlaceholder) {
+      stagePlaceholder.hidden = true;
+    }
+    updateStageForSelection(name, description);
+    appletFrame.dataset.loadedApplet = activeAppletId;
+    delete appletFrame.dataset.targetApplet;
+  });
+}
+
+function isStageFullscreen() {
+  const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement;
+  return fullscreenElement === stage;
+}
+
+function updateFullscreenButton() {
+  if (!fullscreenButton) return;
+  const active = isStageFullscreen();
+  fullscreenButton.textContent = active ? 'Exit Fullscreen' : 'Enter Fullscreen';
+  fullscreenButton.setAttribute('aria-pressed', active ? 'true' : 'false');
+}
+
+if (fullscreenButton && stage) {
+  fullscreenButton.addEventListener('click', async () => {
+    if (isStageFullscreen()) {
+      if (document.exitFullscreen) {
+        await document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
+    } else if (stage.requestFullscreen) {
+      try {
+        await stage.requestFullscreen();
+      } catch (error) {
+        if (stage.webkitRequestFullscreen) {
+          stage.webkitRequestFullscreen();
+        }
+      }
+    } else if (stage.webkitRequestFullscreen) {
+      stage.webkitRequestFullscreen();
+    }
+  });
+
+  document.addEventListener('fullscreenchange', updateFullscreenButton);
+  document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
+  updateFullscreenButton();
+}
+
+setLauncherCollapsed(false);

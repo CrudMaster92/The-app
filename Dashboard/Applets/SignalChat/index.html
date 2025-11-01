@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signal Chat Relay</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="console" aria-live="polite">
+      <header class="console__header">
+        <h1>Signal Chat</h1>
+        <p class="console__status" id="consoleStatus">Relay idle — awaiting traffic</p>
+      </header>
+      <section class="console__log" id="chatLog" aria-label="Message log"></section>
+      <form class="console__form" id="messageForm" autocomplete="off">
+        <label class="console__label" for="messageInput">Queue transmission</label>
+        <div class="console__input-group">
+          <input
+            id="messageInput"
+            name="message"
+            type="text"
+            placeholder="Type encoded directive…"
+            required
+            autocomplete="off"
+          />
+          <button type="submit">Send</button>
+        </div>
+      </form>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
