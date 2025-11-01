@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cracktro Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="noise"></div>
+    <div class="scanlines"></div>
+    <main class="shell">
+      <header class="banner">
+        <div class="logo" aria-hidden="true">
+          <span class="logo-mark">∑</span>
+        </div>
+        <div class="titles">
+          <h1>Signal Override</h1>
+          <p class="subtitle">Cracktro Operations Dashboard</p>
+        </div>
+        <button class="sound-toggle" id="soundToggle" type="button">
+          Enable Sound
+        </button>
+      </header>
+
+      <section class="hero">
+        <canvas id="starfield" aria-hidden="true"></canvas>
+        <div class="hero-copy">
+          <p class="intro">Boot sequence locked in.</p>
+          <p class="status">Awaiting module injection...</p>
+        </div>
+      </section>
+
+      <section class="grid" aria-label="Applet launch bay">
+        <article class="slot">
+          <h2>Slot A</h2>
+          <p>Reserved for future applet.</p>
+        </article>
+        <article class="slot">
+          <h2>Slot B</h2>
+          <p>Drop-in compatible applet bay.</p>
+        </article>
+        <article class="slot">
+          <h2>Slot C</h2>
+          <p>Ready for upcoming feature.</p>
+        </article>
+        <article class="slot">
+          <h2>Slot D</h2>
+          <p>Configure new control surface.</p>
+        </article>
+      </section>
+
+      <footer class="footer">
+        <p>© 1987-20XX Signal Override Systems</p>
+      </footer>
+    </main>
+
+    <script src="main.js"></script>
+  </body>
+</html>
