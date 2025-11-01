@@ -109,23 +109,85 @@
         </section>
       </div>
 
-      <section class="grid" aria-label="Applet launch bay">
-        <article class="slot">
-          <h2>Slot A</h2>
-          <p>Reserved for future applet.</p>
-        </article>
-        <article class="slot">
-          <h2>Slot B</h2>
-          <p>Drop-in compatible applet bay.</p>
-        </article>
-        <article class="slot">
-          <h2>Slot C</h2>
-          <p>Ready for upcoming feature.</p>
-        </article>
-        <article class="slot">
-          <h2>Slot D</h2>
-          <p>Configure new control surface.</p>
-        </article>
+      <section class="workspace" aria-label="Applet control workspace">
+        <aside class="launcher" id="launcherPanel" aria-label="Applet launchers">
+          <header class="launcher__header">
+            <h2>Launch Bay</h2>
+            <p class="launcher__subtitle">Select a module to deploy.</p>
+          </header>
+          <ul class="launcher__list" id="appletList">
+            <li>
+              <button
+                type="button"
+                class="launcher__button"
+                data-applet-id="signal-chat"
+                data-applet-name="Signal Chat"
+                data-applet-url="Applets/SignalChat/index.html"
+                data-applet-desc="Secure relay for encrypted field communications."
+              >
+                <span class="launcher__label">Signal Chat</span>
+                <span class="launcher__meta">Encrypted ops relay</span>
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                class="launcher__button"
+                data-applet-id="chatgpt-clone"
+                data-applet-name="ChatGPT Clone"
+                data-applet-url="Applets/ChatGPTClone/index.html"
+                data-applet-desc="Experimental language analysis console."
+              >
+                <span class="launcher__label">ChatGPT Clone</span>
+                <span class="launcher__meta">Language analysis</span>
+              </button>
+            </li>
+            <li>
+              <div class="launcher__placeholder">
+                <span class="launcher__label">Additional Slots</span>
+                <span class="launcher__meta">Ready for upcoming modules</span>
+              </div>
+            </li>
+          </ul>
+        </aside>
+
+        <section class="stage" id="appletStage" aria-live="polite">
+          <header class="stage__header">
+            <div class="stage__title-group">
+              <h2 id="activeAppletTitle">Applet Screen</h2>
+              <p id="activeAppletStatus">Choose an applet from the launch bay.</p>
+            </div>
+            <div class="stage__controls">
+              <button
+                class="stage__control"
+                type="button"
+                id="toggleLauncher"
+                aria-controls="launcherPanel"
+                aria-expanded="true"
+              >
+                Hide Launchers
+              </button>
+              <button
+                class="stage__control"
+                type="button"
+                id="stageFullscreen"
+                aria-pressed="false"
+              >
+                Enter Fullscreen
+              </button>
+            </div>
+          </header>
+          <div class="stage__body">
+            <iframe
+              id="appletFrame"
+              title="Applet viewport"
+              hidden
+            ></iframe>
+            <div class="stage__placeholder" id="appletPlaceholder">
+              <p id="appletPlaceholderMessage">Awaiting module selection.</p>
+            </div>
+          </div>
+        </section>
       </section>
 
       <footer class="footer">
