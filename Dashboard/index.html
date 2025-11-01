@@ -55,11 +55,38 @@
         </div>
       </header>
 
-      <section class="hero">
+      <section class="hero" aria-label="Applet viewport">
         <canvas id="starfield" aria-hidden="true"></canvas>
-        <div class="hero-copy">
-          <p class="intro">Boot sequence locked in.</p>
-          <p class="status">Awaiting module injection...</p>
+        <div class="hero-screen" id="appletStage" aria-live="polite">
+          <header class="hero-screen__header">
+            <div class="hero-screen__title-group">
+              <h2 id="activeAppletTitle">Boot sequence locked in.</h2>
+              <p id="activeAppletStatus">Awaiting module injection...</p>
+            </div>
+            <div class="hero-screen__controls">
+              <button
+                class="hero-screen__control"
+                type="button"
+                id="stageFullscreen"
+                aria-pressed="false"
+              >
+                Enter Fullscreen
+              </button>
+            </div>
+          </header>
+          <div class="hero-screen__body">
+            <iframe id="appletFrame" title="Applet viewport" hidden></iframe>
+            <div class="hero-screen__placeholder" id="appletPlaceholder">
+              <p class="hero-screen__placeholder-title">Boot sequence locked in.</p>
+              <p
+                class="hero-screen__placeholder-status"
+                id="appletPlaceholderMessage"
+                data-status-pulse
+              >
+                Awaiting module injection...
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -130,8 +157,17 @@
         </section>
       </div>
 
-      <section class="workspace" aria-label="Applet control workspace">
-        <aside class="launcher" id="launcherPanel" aria-label="Applet launchers">
+      <section class="launcher-dock" id="launcherDock" aria-label="Applet launch bay">
+        <button
+          class="launcher-dock__toggle"
+          type="button"
+          id="launcherDockToggle"
+          aria-controls="launcherDockPanel"
+          aria-expanded="true"
+        >
+          Collapse Launch Bay
+        </button>
+        <div class="launcher-dock__panel" id="launcherDockPanel">
           <header class="launcher__header">
             <h2>Launch Bay</h2>
             <p class="launcher__subtitle">Select a module to deploy.</p>
@@ -170,45 +206,7 @@
               </div>
             </li>
           </ul>
-        </aside>
-
-        <section class="stage" id="appletStage" aria-live="polite">
-          <header class="stage__header">
-            <div class="stage__title-group">
-              <h2 id="activeAppletTitle">Applet Screen</h2>
-              <p id="activeAppletStatus">Choose an applet from the launch bay.</p>
-            </div>
-            <div class="stage__controls">
-              <button
-                class="stage__control"
-                type="button"
-                id="toggleLauncher"
-                aria-controls="launcherPanel"
-                aria-expanded="true"
-              >
-                Hide Launchers
-              </button>
-              <button
-                class="stage__control"
-                type="button"
-                id="stageFullscreen"
-                aria-pressed="false"
-              >
-                Enter Fullscreen
-              </button>
-            </div>
-          </header>
-          <div class="stage__body">
-            <iframe
-              id="appletFrame"
-              title="Applet viewport"
-              hidden
-            ></iframe>
-            <div class="stage__placeholder" id="appletPlaceholder">
-              <p id="appletPlaceholderMessage">Awaiting module selection.</p>
-            </div>
-          </div>
-        </section>
+        </div>
       </section>
 
       <footer class="footer">

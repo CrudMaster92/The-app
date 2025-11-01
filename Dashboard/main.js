@@ -1991,7 +1991,7 @@ window.addEventListener('pagehide', () => {
 });
 
 // Text pulse effect
-const statusEl = document.querySelector('.status');
+const statusEl = document.querySelector('[data-status-pulse]');
 if (statusEl) {
   let visible = true;
   setInterval(() => {
@@ -2001,9 +2001,9 @@ if (statusEl) {
 }
 
 // Applet launcher controls
-const workspace = document.querySelector('.workspace');
-const launcherPanel = document.getElementById('launcherPanel');
-const launcherToggle = document.getElementById('toggleLauncher');
+const launcherDock = document.getElementById('launcherDock');
+const launcherPanel = document.getElementById('launcherDockPanel');
+const launcherToggle = document.getElementById('launcherDockToggle');
 const fullscreenButton = document.getElementById('stageFullscreen');
 const stage = document.getElementById('appletStage');
 const stageTitle = document.getElementById('activeAppletTitle');
@@ -2017,13 +2017,15 @@ let activeAppletId = null;
 let launchersCollapsed = false;
 
 function setLauncherCollapsed(collapsed) {
-  if (!workspace || !launcherToggle) return;
+  if (!launcherToggle) return;
   launchersCollapsed = collapsed;
-  workspace.classList.toggle('workspace--launchers-hidden', collapsed);
-  if (launcherPanel) {
-    launcherPanel.hidden = collapsed;
+  if (launcherDock) {
+    launcherDock.classList.toggle('launcher-dock--collapsed', collapsed);
   }
-  launcherToggle.textContent = collapsed ? 'Show Launchers' : 'Hide Launchers';
+  if (launcherPanel) {
+    launcherPanel.setAttribute('aria-hidden', collapsed ? 'true' : 'false');
+  }
+  launcherToggle.textContent = collapsed ? 'Open Launch Bay' : 'Collapse Launch Bay';
   launcherToggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
 }
 
