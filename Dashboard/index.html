@@ -21,14 +21,27 @@
           </div>
         </div>
         <div class="banner-actions">
-          <button
-            class="control-button sound-toggle"
-            id="soundToggle"
-            type="button"
-            aria-pressed="false"
-          >
-            Sound Off
-          </button>
+          <div class="sound-switch" role="group" aria-label="Dashboard sound power">
+            <button
+              class="sound-switch__button"
+              id="soundOnButton"
+              type="button"
+              aria-pressed="false"
+            >
+              On
+            </button>
+            <button
+              class="sound-switch__button is-active"
+              id="soundOffButton"
+              type="button"
+              aria-pressed="true"
+            >
+              Off
+            </button>
+          </div>
+          <p class="soundtrack-indicator" id="soundtrackIndicator" aria-live="polite">
+            Track: rotation paused
+          </p>
           <button
             class="control-button"
             id="themePanelToggle"
@@ -37,7 +50,7 @@
             aria-expanded="false"
             aria-controls="themeDialog"
           >
-            Theme Controls
+            Settings
           </button>
         </div>
       </header>
@@ -105,6 +118,14 @@
             <p id="customThemeHint" class="visually-hidden">
               Choose a color to generate a custom dashboard theme.
             </p>
+          </div>
+          <div class="soundtrack-control" id="soundtrackPanel">
+            <h3>Soundtrack Rotation</h3>
+            <p id="soundtrackAutoHint">
+              Ten generative score variants rotate every 20 seconds while audio is enabled. Choose one to jump instantly.
+            </p>
+            <ul class="soundtrack-list" id="soundtrackList" role="list"></ul>
+            <p class="soundtrack-description" id="soundtrackDescription" aria-live="polite"></p>
           </div>
         </section>
       </div>
