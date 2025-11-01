@@ -362,6 +362,8 @@ const root = document.documentElement;
 const themeButtons = Array.from(document.querySelectorAll('.theme-chip'));
 const customAccentInput = document.getElementById('customAccent');
 const customApplyButton = document.getElementById('applyCustomTheme');
+const themeDialog = document.getElementById('themeDialog');
+const themeOpenButton = document.getElementById('themePanelToggle');
 
 function saveThemeSelection(data) {
   if (typeof window === 'undefined' || !window.localStorage) return;
@@ -474,7 +476,91 @@ function initializeThemeControls() {
   }
 }
 
+function initializeThemeDialog() {
+  if (!themeDialog || !themeOpenButton) {
+    return;
+  }
+
+  const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+  let lastActiveElement = null;
+
+  const getFocusableElements = () =>
+    Array.from(themeDialog.querySelectorAll(focusableSelector)).filter(
+      (element) => !element.hasAttribute('disabled') && element.getAttribute('tabindex') !== '-1'
+    );
+
+  const closeDialog = () => {
+    themeDialog.classList.remove('is-open');
+    themeDialog.setAttribute('hidden', '');
+    themeOpenButton.setAttribute('aria-expanded', 'false');
+    document.removeEventListener('keydown', handleKeydown);
+    if (lastActiveElement && typeof lastActiveElement.focus === 'function') {
+      lastActiveElement.focus();
+    }
+  };
+
+  const handleKeydown = (event) => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeDialog();
+      return;
+    }
+
+    if (event.key !== 'Tab') {
+      return;
+    }
+
+    const focusable = getFocusableElements();
+    if (!focusable.length) {
+      event.preventDefault();
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey) {
+      if (document.activeElement === first || !themeDialog.contains(document.activeElement)) {
+        event.preventDefault();
+        last.focus();
+      }
+    } else if (document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
+
+  const openDialog = () => {
+    lastActiveElement = document.activeElement;
+    themeDialog.classList.add('is-open');
+    themeDialog.removeAttribute('hidden');
+    themeOpenButton.setAttribute('aria-expanded', 'true');
+
+    const focusable = getFocusableElements();
+    const preferred = focusable.find((element) => element.classList.contains('is-active'));
+    (preferred || focusable[0])?.focus();
+
+    document.addEventListener('keydown', handleKeydown);
+  };
+
+  themeOpenButton.addEventListener('click', () => {
+    if (themeDialog.hasAttribute('hidden')) {
+      openDialog();
+    } else {
+      closeDialog();
+    }
+  });
+
+  themeDialog.addEventListener('click', (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    if (target.dataset.themeClose !== undefined) {
+      closeDialog();
+    }
+  });
+}
+
 initializeThemeControls();
+initializeThemeDialog();
 initStarfield();
 
 // Cracktro sound generator
@@ -482,6 +568,16 @@ let audioCtx;
 let arpeggioTimer;
 let bassTimer;
 let soundEnabled = false;
+const soundButton = document.getElementById('soundToggle');
+
+function updateSoundToggleButton(isEnabled) {
+  if (!soundButton) return;
+  soundButton.classList.toggle('is-active', Boolean(isEnabled));
+  soundButton.textContent = isEnabled ? 'Sound On' : 'Sound Off';
+  soundButton.setAttribute('aria-pressed', isEnabled ? 'true' : 'false');
+}
+
+updateSoundToggleButton(soundEnabled);
 
 function createNoiseBuffer(context) {
   const bufferSize = context.sampleRate * 2;
@@ -567,8 +663,7 @@ function startSoundtrack() {
   const hatInterval = setInterval(pulse, 150);
 
   soundEnabled = true;
-  document.getElementById('soundToggle').textContent = 'Sound Enabled';
-  document.getElementById('soundToggle').classList.add('is-active');
+  updateSoundToggleButton(true);
 
   const cleanup = () => {
     clearInterval(arpeggioTimer);
@@ -593,8 +688,17 @@ if (toggle) {
   toggle.addEventListener('click', async () => {
     if (!audioCtx) {
       startSoundtrack();
-    } else if (audioCtx.state === 'suspended') {
+      return;
+    }
+
+    if (audioCtx.state === 'suspended') {
       await audioCtx.resume();
+      soundEnabled = true;
+      updateSoundToggleButton(true);
+    } else if (audioCtx.state === 'running') {
+      await audioCtx.suspend();
+      soundEnabled = false;
+      updateSoundToggleButton(false);
     }
   });
 }

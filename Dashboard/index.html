@@ -11,16 +11,35 @@
     <div class="scanlines"></div>
     <main class="shell">
       <header class="banner">
-        <div class="logo" aria-hidden="true">
-          <span class="logo-mark">∑</span>
+        <div class="identity">
+          <div class="logo" aria-hidden="true">
+            <span class="logo-mark">∑</span>
+          </div>
+          <div class="titles">
+            <h1>Signal Override</h1>
+            <p class="subtitle">Cracktro Operations Dashboard</p>
+          </div>
         </div>
-        <div class="titles">
-          <h1>Signal Override</h1>
-          <p class="subtitle">Cracktro Operations Dashboard</p>
+        <div class="banner-actions">
+          <button
+            class="control-button sound-toggle"
+            id="soundToggle"
+            type="button"
+            aria-pressed="false"
+          >
+            Sound Off
+          </button>
+          <button
+            class="control-button"
+            id="themePanelToggle"
+            type="button"
+            aria-haspopup="dialog"
+            aria-expanded="false"
+            aria-controls="themeDialog"
+          >
+            Theme Controls
+          </button>
         </div>
-        <button class="sound-toggle" id="soundToggle" type="button">
-          Enable Sound
-        </button>
       </header>
 
       <section class="hero">
@@ -31,44 +50,64 @@
         </div>
       </section>
 
-      <section class="control-panel" aria-label="Dashboard theme selector">
-        <h2>Dashboard Theme</h2>
-        <div class="theme-presets">
-          <button
-            class="theme-chip is-active"
-            type="button"
-            data-theme="signal"
-            aria-pressed="true"
-          >
-            Signal Core
-          </button>
-          <button class="theme-chip" type="button" data-theme="aurora" aria-pressed="false">
-            Aurora Drive
-          </button>
-          <button class="theme-chip" type="button" data-theme="ember" aria-pressed="false">
-            Ember Forge
-          </button>
-          <button class="theme-chip" type="button" data-theme="terminal" aria-pressed="false">
-            Terminal Wave
-          </button>
-        </div>
-        <div class="custom-theme">
-          <label for="customAccent">Craft your own accent</label>
-          <input
-            type="color"
-            id="customAccent"
-            name="customAccent"
-            value="#00f5d4"
-            aria-describedby="customThemeHint"
-          />
-          <button type="button" id="applyCustomTheme" aria-pressed="false">
-            Apply Custom Theme
-          </button>
-          <p id="customThemeHint" class="visually-hidden">
-            Choose a color to generate a custom dashboard theme.
-          </p>
-        </div>
-      </section>
+      <div
+        class="theme-modal"
+        id="themeDialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="themeDialogTitle"
+        hidden
+      >
+        <div class="theme-modal__backdrop" data-theme-close></div>
+        <section class="theme-modal__panel control-panel" aria-label="Dashboard theme selector">
+          <header class="theme-modal__header">
+            <h2 id="themeDialogTitle">Dashboard Theme</h2>
+            <button
+              class="theme-modal__close"
+              type="button"
+              data-theme-close
+              aria-label="Close theme controls"
+            >
+              Close
+            </button>
+          </header>
+          <div class="theme-presets">
+            <button
+              class="theme-chip is-active"
+              type="button"
+              data-theme="signal"
+              aria-pressed="true"
+            >
+              Signal Core
+            </button>
+            <button class="theme-chip" type="button" data-theme="aurora" aria-pressed="false">
+              Aurora Drive
+            </button>
+            <button class="theme-chip" type="button" data-theme="ember" aria-pressed="false">
+              Ember Forge
+            </button>
+            <button class="theme-chip" type="button" data-theme="terminal" aria-pressed="false">
+              Terminal Wave
+            </button>
+          </div>
+          <div class="custom-theme">
+            <label for="customAccent">Craft your own accent</label>
+            <input
+              type="color"
+              id="customAccent"
+              name="customAccent"
+              value="#00f5d4"
+              aria-describedby="customThemeHint"
+            />
+            <button type="button" id="applyCustomTheme" aria-pressed="false">
+              Apply Custom Theme
+            </button>
+            <p id="customThemeHint" class="visually-hidden">
+              Choose a color to generate a custom dashboard theme.
+            </p>
+          </div>
+        </section>
+      </div>
 
       <section class="grid" aria-label="Applet launch bay">
         <article class="slot">
