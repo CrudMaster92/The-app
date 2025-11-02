@@ -2055,6 +2055,7 @@ function prepareStageLoading(name) {
   }
   if (stagePlaceholder) {
     stagePlaceholder.hidden = false;
+    stagePlaceholder.classList.remove('hero-screen__placeholder--hidden');
   }
   if (appletFrame) {
     appletFrame.hidden = true;
@@ -2079,6 +2080,7 @@ function handleAppletSelection(button) {
     }
     if (stagePlaceholder) {
       stagePlaceholder.hidden = false;
+      stagePlaceholder.classList.remove('hero-screen__placeholder--hidden');
     }
     if (appletFrame) {
       appletFrame.hidden = true;
@@ -2090,6 +2092,7 @@ function handleAppletSelection(button) {
     updateStageForSelection(null, description);
     if (stagePlaceholder) {
       stagePlaceholder.hidden = true;
+      stagePlaceholder.classList.add('hero-screen__placeholder--hidden');
     }
     appletFrame.hidden = false;
     return;
@@ -2132,6 +2135,7 @@ if (appletFrame) {
     appletFrame.hidden = false;
     if (stagePlaceholder) {
       stagePlaceholder.hidden = true;
+      stagePlaceholder.classList.add('hero-screen__placeholder--hidden');
     }
     updateStageForSelection(name, description);
     appletFrame.dataset.loadedApplet = activeAppletId;
