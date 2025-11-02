@@ -5,9 +5,11 @@
   font-family: 'Share Tech Mono', 'IBM Plex Mono', 'Menlo', monospace;
 
   --bg: #050608;
+  --body-gradient: radial-gradient(circle at top, rgba(0, 168, 255, 0.15), transparent 50%), var(--bg);
   --shell-bg: rgba(2, 6, 12, 0.78);
   --shell-border: rgba(0, 245, 212, 0.2);
   --shell-shadow: rgba(0, 168, 255, 0.25);
+  --shell-backdrop: blur(14px) saturate(140%);
 
   --accent: #00f5d4;
   --accent-secondary: #00a8ff;
@@ -17,6 +19,7 @@
   --logo-outer-glow: rgba(0, 168, 255, 0.4);
   --logo-bg-start: rgba(0, 245, 212, 0.1);
   --logo-bg-end: rgba(0, 168, 255, 0.08);
+  --logo-mark-glow: rgba(0, 245, 212, 0.8);
 
   --sound-border: rgba(0, 245, 212, 0.4);
   --sound-shadow: rgba(0, 245, 212, 0.25);
@@ -33,7 +36,10 @@
   --slot-border: rgba(0, 168, 255, 0.25);
   --footer-muted: rgba(230, 247, 255, 0.45);
   --scanline: rgba(0, 245, 212, 0.08);
+  --scanline-speed: 6s;
+  --scanline-opacity: 0.3;
   --noise-opacity: 0.15;
+  --noise-mode: screen;
 }
 
 * {
@@ -54,7 +60,7 @@
 }
 
 body {
-  background: radial-gradient(circle at top, var(--accent-soft), transparent 50%), var(--bg);
+  background: var(--body-gradient);
   color: var(--text);
   min-height: 100vh;
   display: flex;
@@ -62,6 +68,7 @@ body {
   justify-content: center;
   overflow: hidden;
   padding-block: clamp(0.75rem, 3vw, 2rem);
+  transition: background 0.6s ease, color 0.6s ease;
 }
 
 .shell {
@@ -71,7 +78,7 @@ body {
   padding: clamp(1rem, 2.1vw, 2rem);
   background: var(--shell-bg);
   border: 1px solid var(--shell-border);
-  backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: var(--shell-backdrop);
   box-shadow: 0 0 40px var(--shell-shadow);
   display: grid;
   grid-template-rows: auto minmax(440px, 1fr) auto auto;
@@ -106,7 +113,7 @@ body {
 .logo-mark {
   font-size: clamp(1.4rem, 2.8vw, 2rem);
   color: var(--accent);
-  text-shadow: 0 0 12px rgba(0, 245, 212, 0.8);
+  text-shadow: 0 0 12px var(--logo-mark-glow);
 }
 
 .titles h1 {
@@ -795,7 +802,7 @@ body {
 
 .noise {
   background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"%3E%3Cfilter id="n"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="1.2" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="160" height="160" filter="url(%23n)" opacity="0.15"/%3E%3C/svg%3E');
-  mix-blend-mode: screen;
+  mix-blend-mode: var(--noise-mode, screen);
   opacity: var(--noise-opacity);
 }
 
@@ -807,8 +814,8 @@ body {
     transparent 1px,
     transparent 4px
   );
-  animation: scan 6s linear infinite;
-  opacity: 0.3;
+  animation: scan var(--scanline-speed, 6s) linear infinite;
+  opacity: var(--scanline-opacity, 0.3);
 }
 
 @keyframes scan {
