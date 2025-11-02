@@ -50,6 +50,17 @@ const dom = {
   imageInput: document.getElementById('imageInput'),
 };
 
+function generateId(prefix) {
+  if (typeof globalThis !== 'undefined') {
+    const { crypto: cryptoApi } = globalThis;
+    if (cryptoApi && typeof cryptoApi.randomUUID === 'function') {
+      return cryptoApi.randomUUID();
+    }
+  }
+  const unique = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+  return prefix ? `${prefix}-${unique}` : unique;
+}
+
 function loadSettings() {
   try {
     const raw = localStorage.getItem(storageKeys.settings);
@@ -85,7 +96,7 @@ function persistConversations() {
 }
 
 function createConversation() {
-  const id = crypto.randomUUID ? crypto.randomUUID() : `conv-${Date.now()}`;
+  const id = generateId('conv');
   const conversation = {
     id,
     title: 'New conversation',
@@ -240,7 +251,7 @@ dom.composerForm.addEventListener('submit', async (event) => {
     conversation = getActiveConversation();
   }
   const message = {
-    id: crypto.randomUUID ? crypto.randomUUID() : `msg-${Date.now()}`,
+    id: generateId('msg'),
     role: 'user',
     content,
     attachments,
@@ -259,7 +270,7 @@ dom.composerForm.addEventListener('submit', async (event) => {
 });
 
 async function respondToConversation(conversation) {
-  const placeholderId = crypto.randomUUID ? crypto.randomUUID() : `pending-${Date.now()}`;
+  const placeholderId = generateId('pending');
   const pendingMessage = {
     id: placeholderId,
     role: 'assistant',
@@ -275,7 +286,7 @@ async function respondToConversation(conversation) {
   try {
     const reply = await fetchAssistantResponse(conversation.messages);
     const responseMessage = {
-      id: crypto.randomUUID ? crypto.randomUUID() : `assistant-${Date.now()}`,
+      id: generateId('assistant'),
       role: 'assistant',
       content: reply,
       createdAt: new Date().toISOString(),
@@ -295,7 +306,7 @@ async function respondToConversation(conversation) {
       conversation.messages.splice(index, 1);
     }
     const errorMessage = {
-      id: crypto.randomUUID ? crypto.randomUUID() : `error-${Date.now()}`,
+      id: generateId('error'),
       role: 'assistant',
       content: `Unable to fetch response: ${error.message}`,
       createdAt: new Date().toISOString(),
