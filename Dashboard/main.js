@@ -2134,6 +2134,10 @@ window.addEventListener('pagehide', () => {
   if (audioCtx && audioCtx.state !== 'closed') {
     audioCtx.close();
   }
+  if (typeof cleanupFrameEscapeHandler === 'function') {
+    cleanupFrameEscapeHandler();
+    cleanupFrameEscapeHandler = null;
+  }
 });
 
 // Text pulse effect
@@ -2161,6 +2165,7 @@ const launcherButtons = Array.from(document.querySelectorAll('.launcher__button'
 
 let activeAppletId = null;
 let launchersCollapsed = false;
+let cleanupFrameEscapeHandler = null;
 
 function setLauncherCollapsed(collapsed) {
   if (!launcherToggle) return;
@@ -2205,6 +2210,36 @@ function prepareStageLoading(name) {
   }
   if (appletFrame) {
     appletFrame.hidden = true;
+  }
+}
+
+function attachFrameEscapeHandler() {
+  if (!appletFrame) return;
+  if (typeof cleanupFrameEscapeHandler === 'function') {
+    cleanupFrameEscapeHandler();
+    cleanupFrameEscapeHandler = null;
+  }
+
+  try {
+    const { contentWindow } = appletFrame;
+    if (!contentWindow) return;
+
+    const handler = (event) => {
+      if (event.key === 'Escape' && isStageImmersive()) {
+        exitStageImmersive();
+      }
+    };
+
+    contentWindow.addEventListener('keydown', handler);
+    cleanupFrameEscapeHandler = () => {
+      try {
+        contentWindow.removeEventListener('keydown', handler);
+      } catch (error) {
+        // Ignore cleanup errors from detached frames.
+      }
+    };
+  } catch (error) {
+    cleanupFrameEscapeHandler = null;
   }
 }
 
@@ -2286,44 +2321,50 @@ if (appletFrame) {
     updateStageForSelection(name, description);
     appletFrame.dataset.loadedApplet = activeAppletId;
     delete appletFrame.dataset.targetApplet;
+    attachFrameEscapeHandler();
   });
 }
 
-function isStageFullscreen() {
-  const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement;
-  return fullscreenElement === stage;
+function isStageImmersive() {
+  return stage?.classList.contains('hero-screen--immersive');
+}
+
+function enterStageImmersive() {
+  if (!stage) return;
+  stage.classList.add('hero-screen--immersive');
+  document.body.classList.add('stage-immersive-active');
+  updateFullscreenButton();
+}
+
+function exitStageImmersive() {
+  if (!stage) return;
+  stage.classList.remove('hero-screen--immersive');
+  document.body.classList.remove('stage-immersive-active');
+  updateFullscreenButton();
 }
 
 function updateFullscreenButton() {
   if (!fullscreenButton) return;
-  const active = isStageFullscreen();
-  fullscreenButton.textContent = active ? 'Exit Fullscreen' : 'Enter Fullscreen';
+  const active = isStageImmersive();
+  fullscreenButton.textContent = active ? 'Exit Immersive View' : 'Enter Immersive View';
   fullscreenButton.setAttribute('aria-pressed', active ? 'true' : 'false');
 }
 
 if (fullscreenButton && stage) {
-  fullscreenButton.addEventListener('click', async () => {
-    if (isStageFullscreen()) {
-      if (document.exitFullscreen) {
-        await document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      }
-    } else if (stage.requestFullscreen) {
-      try {
-        await stage.requestFullscreen();
-      } catch (error) {
-        if (stage.webkitRequestFullscreen) {
-          stage.webkitRequestFullscreen();
-        }
-      }
-    } else if (stage.webkitRequestFullscreen) {
-      stage.webkitRequestFullscreen();
+  fullscreenButton.addEventListener('click', () => {
+    if (isStageImmersive()) {
+      exitStageImmersive();
+    } else {
+      enterStageImmersive();
     }
   });
 
-  document.addEventListener('fullscreenchange', updateFullscreenButton);
-  document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && isStageImmersive()) {
+      exitStageImmersive();
+    }
+  });
+
   updateFullscreenButton();
 }
 

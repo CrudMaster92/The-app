@@ -678,28 +678,32 @@ body {
   background: rgba(2, 16, 24, 0.35);
 }
 
-.hero-screen:fullscreen,
-.hero-screen:-webkit-full-screen {
+.hero-screen--immersive {
+  position: fixed;
+  inset: 0;
   width: 100vw;
   height: 100vh;
-  border: none;
   margin: 0;
+  border: none;
   box-shadow: none;
+  z-index: 20;
+  background: rgba(0, 6, 12, 0.95);
 }
 
-.hero-screen:fullscreen .hero-screen__header,
-.hero-screen:-webkit-full-screen .hero-screen__header {
+.hero-screen--immersive .hero-screen__header {
   padding-inline: clamp(1rem, 3vw, 2.5rem);
 }
 
-.hero-screen:fullscreen .hero-screen__body,
-.hero-screen:-webkit-full-screen .hero-screen__body {
+.hero-screen--immersive .hero-screen__body {
   min-height: 0;
 }
 
-.hero-screen:fullscreen #appletFrame,
-.hero-screen:-webkit-full-screen #appletFrame {
+.hero-screen--immersive #appletFrame {
   background: rgba(0, 4, 8, 0.95);
+}
+
+body.stage-immersive-active {
+  overflow: hidden;
 }
 
 @media (max-width: 960px) {
