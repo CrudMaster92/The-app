@@ -9,5 +9,6 @@
 - **ChatGPT Clone** (`ChatGPTClone/index.html`): Experimental language analysis console.
 - **Gemini Chat** (`GeminiChat/index.html`): Advanced language analysis console with Gemini.
 - **Boolean Search Builder** (`BooleanSearchBuilder/index.html`): Guided boolean query composer with LLM drafting assistance.
+- **Snake Sprint** (`SnakeSprint/index.html`): Reflex training module with a retro snake simulation.
 
 Keep this list in sync as applets are added or removed so future agents know what modules ship with the dashboard.
