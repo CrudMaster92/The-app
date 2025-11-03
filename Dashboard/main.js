@@ -2161,6 +2161,8 @@ const stageStatus = document.getElementById('activeAppletStatus');
 const stagePlaceholder = document.getElementById('appletPlaceholder');
 const placeholderMessage = document.getElementById('appletPlaceholderMessage');
 const appletFrame = document.getElementById('appletFrame');
+const catalogView = document.getElementById('appletCatalogView');
+const catalogList = document.getElementById('appletCatalogList');
 const launcherButtons = Array.from(document.querySelectorAll('.launcher__button'));
 
 let activeAppletId = null;
@@ -2186,6 +2188,71 @@ function setActiveLauncherButton(activeButton) {
     button.classList.toggle('is-active', isActive);
     button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
   });
+}
+
+function hideCatalogView() {
+  if (!catalogView) return;
+  catalogView.hidden = true;
+}
+
+function buildCatalogView() {
+  if (!catalogList) return;
+  catalogList.innerHTML = '';
+
+  const playableButtons = launcherButtons.filter(
+    (button) => button.dataset.appletCatalog !== 'true' && button.dataset.appletUrl,
+  );
+
+  if (!playableButtons.length) {
+    const emptyState = document.createElement('li');
+    emptyState.className = 'catalog-panel__empty';
+    emptyState.textContent = 'No applets are currently configured for testing.';
+    catalogList.appendChild(emptyState);
+    return;
+  }
+
+  playableButtons.forEach((launcher) => {
+    const item = document.createElement('li');
+    item.className = 'catalog-panel__item';
+
+    const entryButton = document.createElement('button');
+    entryButton.type = 'button';
+    entryButton.className = 'catalog-panel__button';
+
+    const title = document.createElement('span');
+    title.className = 'catalog-panel__button-title';
+    title.textContent = launcher.dataset.appletName
+      || launcher.querySelector('.launcher__label')?.textContent?.trim()
+      || 'Applet';
+
+    const meta = document.createElement('span');
+    meta.className = 'catalog-panel__button-meta';
+    meta.textContent = launcher.dataset.appletDesc
+      || launcher.querySelector('.launcher__meta')?.textContent?.trim()
+      || 'Launch module';
+
+    entryButton.append(title, meta);
+    entryButton.addEventListener('click', () => {
+      launcher.focus();
+      launcher.click();
+    });
+
+    item.appendChild(entryButton);
+    catalogList.appendChild(item);
+  });
+}
+
+function showCatalogView() {
+  if (stagePlaceholder) {
+    stagePlaceholder.hidden = true;
+    stagePlaceholder.classList.add('hero-screen__placeholder--hidden');
+  }
+  if (appletFrame) {
+    appletFrame.hidden = true;
+  }
+  if (!catalogView) return;
+  buildCatalogView();
+  catalogView.hidden = false;
 }
 
 function updateStageForSelection(name, description) {
@@ -2249,10 +2316,18 @@ function handleAppletSelection(button) {
   const description = button.dataset.appletDesc || 'Module ready.';
   const url = button.dataset.appletUrl;
   const appletId = button.dataset.appletId || url || name;
+  const isCatalog = button.dataset.appletCatalog === 'true';
 
   activeAppletId = appletId;
   setActiveLauncherButton(button);
-  updateStageForSelection(name, null);
+  updateStageForSelection(name, isCatalog ? description : null);
+
+  if (isCatalog) {
+    showCatalogView();
+    return;
+  }
+
+  hideCatalogView();
 
   if (!url) {
     updateStageForSelection(null, description || 'Module slot unconfigured.');
