@@ -76,6 +76,15 @@
           </header>
           <div class="hero-screen__body">
             <iframe id="appletFrame" title="Applet viewport" hidden></iframe>
+            <div class="hero-screen__catalog" id="appletCatalogView" hidden>
+              <div class="catalog-panel" role="document">
+                <h3 class="catalog-panel__title">Module Test Bench</h3>
+                <p class="catalog-panel__subtitle" id="catalogInstructions">
+                  Select an applet below to launch it inside the viewport for isolated testing.
+                </p>
+                <ul class="catalog-panel__list" id="appletCatalogList" role="list"></ul>
+              </div>
+            </div>
             <div class="hero-screen__placeholder" id="appletPlaceholder">
               <p class="hero-screen__placeholder-title">Boot sequence locked in.</p>
               <p
@@ -182,6 +191,19 @@
             <p class="launcher__subtitle">Select a module to deploy.</p>
           </header>
           <ul class="launcher__list" id="appletList">
+            <li>
+              <button
+                type="button"
+                class="launcher__button"
+                data-applet-id="applet-catalog"
+                data-applet-name="Module Test Bench"
+                data-applet-desc="Review all applets in a dedicated test harness."
+                data-applet-catalog="true"
+              >
+                <span class="launcher__label">Module Test Bench</span>
+                <span class="launcher__meta">Internal diagnostics</span>
+              </button>
+            </li>
             <li>
               <button
                 type="button"
