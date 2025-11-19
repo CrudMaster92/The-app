@@ -1,7 +1,25 @@
 import { applet as fontPickerApplet } from "./applets/font-picker/applet.js";
 import { applet as themeSelectorApplet } from "./applets/theme-selector/applet.js";
+import { sendMessageToChatGPT } from "./popupBridge.js";
 
 const applets = [fontPickerApplet, themeSelectorApplet];
+
+const context = {
+  async applyFontSettings(settings) {
+    try {
+      await sendMessageToChatGPT({ type: "APPLY_FONT", payload: settings });
+    } catch (error) {
+      console.warn("Unable to apply font settings:", error?.message ?? error);
+    }
+  },
+  async applyTheme(colors) {
+    try {
+      await sendMessageToChatGPT({ type: "APPLY_THEME", payload: colors });
+    } catch (error) {
+      console.warn("Unable to apply theme:", error?.message ?? error);
+    }
+  }
+};
 
 function populateSelect(selectEl, descriptionEl) {
   for (const applet of applets) {
@@ -21,7 +39,7 @@ function renderApplet(appletId) {
   host.innerHTML = "";
   const applet = applets.find((entry) => entry.id === appletId);
   if (!applet) return;
-  host.append(applet.render());
+  host.append(applet.render(context));
 }
 
 function main() {

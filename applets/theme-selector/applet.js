@@ -137,13 +137,6 @@ function getModifiedColors(themeColors, modifiers) {
   };
 }
 
-function applyTheme(colors) {
-  const root = document.documentElement;
-  for (const [key, value] of Object.entries(colors)) {
-    root.style.setProperty(`--${key}`, value);
-  }
-}
-
 function createPalettePreview() {
   const wrapper = document.createElement("div");
   wrapper.className = "theme-preview card";
@@ -194,14 +187,14 @@ export const applet = {
   id: "theme-selector",
   name: "Theme Selector",
   description: "Switch between curated palettes and tweak them with color modifiers.",
-  render() {
+  render(context = {}) {
     const container = document.createElement("div");
     container.className = "card";
 
     const title = document.createElement("h2");
     title.textContent = "Theme Selector";
     const subtitle = document.createElement("p");
-    subtitle.textContent = "Pick a palette and adjust surface/accent intensity to restyle the popup.";
+    subtitle.textContent = "Pick a palette and adjust surface/accent intensity to recolor ChatGPT.";
 
     const { wrapper: selectWrapper, select } = createThemeSelect();
     const themeDescription = document.createElement("p");
@@ -252,9 +245,9 @@ export const applet = {
         surface: Number(surfaceRange.value),
         accent: Number(accentRange.value)
       });
-      applyTheme(colors);
       updatePreview(colors);
       codeInner.textContent = `:root {\n${colorsToSnippet(colors)}\n}`;
+      Promise.resolve(context.applyTheme?.(colors)).catch(() => {});
     }
 
     function updatePreview(colors) {
