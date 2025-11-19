@@ -95,7 +95,7 @@ export const applet = {
   id: "font-picker",
   name: "Font Picker",
   description: "Pick a typeface and size, then copy the ready-to-use CSS.",
-  render() {
+  render(context = {}) {
     const container = document.createElement("div");
     container.className = "card";
 
@@ -116,7 +116,10 @@ export const applet = {
     container.append(title, subtitle, controls, preview, codeCard);
 
     function sync() {
-      updatePreview(preview, codeInner, select.value, Number(range.value));
+      const fontFamily = select.value;
+      const fontSize = Number(range.value);
+      updatePreview(preview, codeInner, fontFamily, fontSize);
+      Promise.resolve(context.applyFontSettings?.({ fontFamily, fontSize })).catch(() => {});
     }
 
     select.addEventListener("change", sync);
