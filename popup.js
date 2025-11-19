@@ -1,6 +1,7 @@
 import { applet as fontPickerApplet } from "./applets/font-picker/applet.js";
+import { applet as themeSelectorApplet } from "./applets/theme-selector/applet.js";
 
-const applets = [fontPickerApplet];
+const applets = [fontPickerApplet, themeSelectorApplet];
 
 function populateSelect(selectEl, descriptionEl) {
   for (const applet of applets) {

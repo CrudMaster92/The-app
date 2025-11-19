@@ -56,6 +56,16 @@ label {
   color: var(--muted);
 }
 
+label.input-stack {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+label.input-stack select {
+  margin-top: 2px;
+}
+
 select {
   width: 100%;
   padding: 10px 12px;
@@ -98,6 +108,18 @@ select {
   margin: 0 0 8px;
   color: var(--muted);
   font-size: 13px;
+}
+
+.theme-description {
+  margin-top: -4px;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+.card h3 {
+  margin: 0 0 6px;
+  font-size: 14px;
+  color: var(--text);
 }
 
 .input-row {
@@ -148,4 +170,58 @@ button.copy-btn:hover {
 
 button.copy-btn:active {
   transform: translateY(1px);
+}
+
+.button {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: border-color 0.2s ease, transform 0.05s ease;
+  width: 100%;
+  text-align: center;
+  margin: 8px 0;
+}
+
+.button:hover {
+  border-color: var(--accent);
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.button.ghost {
+  background: transparent;
+}
+
+.theme-preview.card {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 8px;
+}
+
+.swatch {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  min-height: 70px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+
+.swatch p {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: pre-line;
 }
