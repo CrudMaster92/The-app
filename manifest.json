@@ -1,0 +1,9 @@
+{
+  "manifest_version": 3,
+  "name": "Modular Applets",
+  "version": "0.1.0",
+  "description": "A modular Chrome extension with selectable applets.",
+  "action": {
+    "default_popup": "popup.html"
+  }
+}

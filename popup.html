@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modular Applets</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Modular Extension</p>
+        <h1>Applet Picker</h1>
+      </div>
+    </header>
+
+    <section class="applet-selector">
+      <label for="applet-select">Choose an applet</label>
+      <select id="applet-select"></select>
+      <p id="applet-description" class="applet-description"></p>
+    </section>
+
+    <main id="applet-container" class="applet-container" aria-live="polite"></main>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>
