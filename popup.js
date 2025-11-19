@@ -1,8 +1,9 @@
 import { applet as fontPickerApplet } from "./applets/font-picker/applet.js";
 import { applet as themeSelectorApplet } from "./applets/theme-selector/applet.js";
+import { applet as promptStudioApplet } from "./applets/prompt-studio/applet.js";
 import { sendMessageToChatGPT } from "./popupBridge.js";
 
-const applets = [fontPickerApplet, themeSelectorApplet];
+const applets = [promptStudioApplet, fontPickerApplet, themeSelectorApplet];
 
 const context = {
   async applyFontSettings(settings) {
@@ -17,6 +18,15 @@ const context = {
       await sendMessageToChatGPT({ type: "APPLY_THEME", payload: colors });
     } catch (error) {
       console.warn("Unable to apply theme:", error?.message ?? error);
+    }
+  },
+  async applyPrompt(prompt) {
+    if (!prompt) return;
+    try {
+      await sendMessageToChatGPT({ type: "INJECT_PROMPT", payload: { prompt } });
+    } catch (error) {
+      console.warn("Unable to send prompt:", error?.message ?? error);
+      throw error;
     }
   }
 };

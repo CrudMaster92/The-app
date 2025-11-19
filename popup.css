@@ -76,6 +76,23 @@ select {
   font-size: 14px;
 }
 
+textarea.textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  font-size: 14px;
+  resize: vertical;
+  min-height: 56px;
+}
+
+textarea.textarea:focus {
+  outline: 1px solid var(--accent);
+  border-color: var(--accent);
+}
+
 .applet-description {
   margin: 0;
   color: var(--muted);
@@ -196,6 +213,36 @@ button.copy-btn:active {
 
 .button.ghost {
   background: transparent;
+}
+
+.dual-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  margin-top: 6px;
+}
+
+.toggle-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+
+.button-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
 }
 
 .theme-preview.card {

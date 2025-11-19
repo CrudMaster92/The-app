@@ -7,6 +7,10 @@ const state = {
   colors: null
 };
 
+function findPromptInput() {
+  return document.querySelector("textarea#prompt-textarea");
+}
+
 function ensureStyleElement() {
   let style = document.getElementById(STYLE_ID);
   if (!style) {
@@ -101,6 +105,18 @@ function applyThemeColors(colors) {
   renderStyles();
 }
 
+function injectPrompt(promptText) {
+  const input = findPromptInput();
+  if (!input) {
+    throw new Error("ChatGPT prompt box not found");
+  }
+  input.focus();
+  input.value = promptText;
+  input.dispatchEvent(new Event("input", { bubbles: true }));
+  input.dispatchEvent(new Event("change", { bubbles: true }));
+  input.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (!message || message.source !== SOURCE) {
     return;
@@ -114,6 +130,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   if (message.type === "APPLY_THEME") {
     applyThemeColors(message.payload);
+    sendResponse?.({ ok: true });
+    return true;
+  }
+
+  if (message.type === "INJECT_PROMPT") {
+    injectPrompt(message.payload?.prompt ?? "");
     sendResponse?.({ ok: true });
     return true;
   }
