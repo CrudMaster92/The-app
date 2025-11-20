@@ -315,3 +315,63 @@ button.copy-btn:active {
   color: var(--text);
   white-space: pre-wrap;
 }
+
+.stack {
+  display: grid;
+  gap: 12px;
+}
+
+.info-card {
+  background: rgba(255, 255, 255, 0.03);
+  height: 100%;
+}
+
+.info-card p {
+  color: var(--text);
+}
+
+.pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  padding: 10px 12px;
+  min-width: 120px;
+  text-align: left;
+}
+
+.pill-label {
+  margin: 0 0 4px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.pill-value {
+  font-size: 15px;
+}
+
+.pill-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+}
+
+.action-pill {
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.05s ease;
+  background: rgba(139, 92, 246, 0.1);
+}
+
+.action-pill:hover {
+  border-color: var(--accent);
+}
+
+.action-pill:active {
+  transform: translateY(1px);
+}

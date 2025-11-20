@@ -13,6 +13,7 @@ This repository contains a modular Chrome extension. The popup hosts a simple ap
 - **Font Picker** (`applets/font-picker/`): choose a font family and size, preview live text, and copy the CSS snippet for reuse.
 - **Theme Selector** (`applets/theme-selector/`): swap between curated palettes, tweak brightness/accent modifiers, and copy the resulting CSS variables.
 - **Conversation Insights** (`applets/conversation-insights/`): capture live ChatGPT metrics (turn counts, words, token estimate), highlight the newest assistant reply, and copy a markdown export of the thread.
+- **Follow-up Lab** (`applets/follow-up-lab/`): sync the active ChatGPT tab, parse the latest turn, and drop in sharp follow-up prompts (clarify, action plan, compare, or challenge).
 
 ## Load the extension locally
 1. Run `npm install` if your applets eventually need bundling (not required for the current vanilla setup).
