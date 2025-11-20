@@ -245,6 +245,10 @@ button.copy-btn:active {
   margin-top: 10px;
 }
 
+.button-row.triple {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .theme-preview.card {
   background: rgba(255, 255, 255, 0.04);
 }
@@ -271,4 +275,43 @@ button.copy-btn:active {
   letter-spacing: 0.03em;
   text-transform: uppercase;
   white-space: pre-line;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.stat-pill {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: rgba(139, 92, 246, 0.08);
+}
+
+.stat-label {
+  margin: 0 0 4px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.stat-value {
+  font-size: 16px;
+}
+
+.insight-list {
+  margin: 6px 0 0;
+  padding-left: 18px;
+  color: var(--text);
+  display: grid;
+  gap: 4px;
+}
+
+.latest-preview {
+  color: var(--text);
+  white-space: pre-wrap;
 }

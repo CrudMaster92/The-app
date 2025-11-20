@@ -1,9 +1,15 @@
 import { applet as fontPickerApplet } from "./applets/font-picker/applet.js";
 import { applet as themeSelectorApplet } from "./applets/theme-selector/applet.js";
 import { applet as promptStudioApplet } from "./applets/prompt-studio/applet.js";
+import { applet as conversationInsightsApplet } from "./applets/conversation-insights/applet.js";
 import { sendMessageToChatGPT } from "./popupBridge.js";
 
-const applets = [promptStudioApplet, fontPickerApplet, themeSelectorApplet];
+const applets = [
+  promptStudioApplet,
+  conversationInsightsApplet,
+  fontPickerApplet,
+  themeSelectorApplet
+];
 
 const context = {
   async applyFontSettings(settings) {
@@ -28,6 +34,14 @@ const context = {
       console.warn("Unable to send prompt:", error?.message ?? error);
       throw error;
     }
+  },
+  async inspectThread() {
+    const response = await sendMessageToChatGPT({ type: "INSPECT_THREAD" });
+    return response;
+  },
+  async highlightLastAssistant() {
+    const response = await sendMessageToChatGPT({ type: "HIGHLIGHT_LAST_ASSISTANT" });
+    return response;
   }
 };
 
