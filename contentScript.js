@@ -181,7 +181,8 @@ function getConversationSnapshot() {
     latestAssistant: latestAssistant
       ? {
           preview: latestAssistant.text.slice(0, 260),
-          words: wordCount(latestAssistant.text)
+          words: wordCount(latestAssistant.text),
+          fullText: latestAssistant.text
         }
       : null,
     latestUser: latestUser?.text || null,

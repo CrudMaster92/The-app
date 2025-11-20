@@ -2,9 +2,11 @@ import { applet as fontPickerApplet } from "./applets/font-picker/applet.js";
 import { applet as themeSelectorApplet } from "./applets/theme-selector/applet.js";
 import { applet as promptStudioApplet } from "./applets/prompt-studio/applet.js";
 import { applet as conversationInsightsApplet } from "./applets/conversation-insights/applet.js";
+import { applet as followUpLabApplet } from "./applets/follow-up-lab/applet.js";
 import { sendMessageToChatGPT } from "./popupBridge.js";
 
 const applets = [
+  followUpLabApplet,
   promptStudioApplet,
   conversationInsightsApplet,
   fontPickerApplet,
