@@ -1,0 +1,209 @@
+@font-face {
+  font-family: "Orbitron";
+  src: local("Orbitron"), local("Orbitron-Regular");
+}
+
+:root {
+  color-scheme: dark;
+  --neon-pink: #ff49f1;
+  --neon-blue: #20d6ff;
+  --neon-purple: #8c52ff;
+  --neon-green: #39ffb6;
+  --bg-dark: #03010f;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Orbitron", "Segoe UI", system-ui, sans-serif;
+  background: radial-gradient(circle at top, #1b1145 0%, #05020f 50%, #010107 100%);
+  color: #eaf8ff;
+  overflow: hidden;
+  height: 100vh;
+}
+
+#stage {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.scanlines {
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.03) 0px,
+      rgba(255, 255, 255, 0.03) 1px,
+      rgba(0, 0, 0, 0) 2px,
+      rgba(0, 0, 0, 0) 4px
+    ),
+    radial-gradient(circle at 20% 20%, rgba(32, 214, 255, 0.15), transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(255, 73, 241, 0.2), transparent 45%);
+  mix-blend-mode: screen;
+  opacity: 0.6;
+  z-index: 4;
+  pointer-events: none;
+  animation: scanShift 6s linear infinite;
+}
+
+.vignette {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.7) 100%);
+  z-index: 5;
+  pointer-events: none;
+}
+
+@keyframes scanShift {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(40px);
+  }
+}
+
+.hud {
+  position: relative;
+  z-index: 3;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  align-items: center;
+  justify-items: center;
+  padding: 4vh 8vw 10vh;
+  text-align: center;
+  gap: 2.5rem;
+}
+
+.logo {
+  text-transform: uppercase;
+  letter-spacing: 0.4rem;
+  text-shadow: 0 0 12px rgba(32, 214, 255, 0.8), 0 0 24px rgba(255, 73, 241, 0.7);
+  animation: pulse 2.8s ease-in-out infinite;
+}
+
+.logo__glow {
+  font-size: clamp(2rem, 7vw, 5rem);
+  display: block;
+  color: var(--neon-blue);
+}
+
+.logo__sub {
+  font-size: clamp(0.8rem, 2.5vw, 1.5rem);
+  color: var(--neon-pink);
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+.controls {
+  display: grid;
+  gap: 1rem;
+}
+
+.launch {
+  padding: 0.9rem 2.8rem;
+  font-size: 1rem;
+  letter-spacing: 0.3rem;
+  border: 2px solid var(--neon-green);
+  border-radius: 999px;
+  background: rgba(10, 255, 191, 0.12);
+  color: var(--neon-green);
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 0 18px rgba(57, 255, 182, 0.5), inset 0 0 10px rgba(57, 255, 182, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.launch:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 0 28px rgba(57, 255, 182, 0.8), inset 0 0 14px rgba(57, 255, 182, 0.6);
+}
+
+.hint {
+  font-size: 0.8rem;
+  color: rgba(234, 248, 255, 0.7);
+}
+
+.status {
+  width: min(420px, 80vw);
+  background: rgba(6, 12, 32, 0.65);
+  border: 1px solid rgba(32, 214, 255, 0.3);
+  border-radius: 16px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 0 20px rgba(32, 214, 255, 0.2);
+  display: grid;
+  gap: 0.6rem;
+  text-align: left;
+}
+
+.status__row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  letter-spacing: 0.2rem;
+}
+
+.status__label {
+  color: rgba(234, 248, 255, 0.6);
+}
+
+.status__value {
+  color: var(--neon-green);
+}
+
+.credits {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3rem;
+  color: rgba(234, 248, 255, 0.6);
+}
+
+.scroll {
+  position: fixed;
+  bottom: 6vh;
+  width: 100%;
+  font-size: 1rem;
+  color: var(--neon-purple);
+  text-transform: uppercase;
+  letter-spacing: 0.35rem;
+  white-space: nowrap;
+  z-index: 2;
+  text-shadow: 0 0 8px rgba(140, 82, 255, 0.6);
+  pointer-events: none;
+}
+
+.scroll span {
+  display: inline-block;
+  padding-left: 100%;
+  animation: scroll 18s linear infinite;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.hidden {
+  opacity: 0.2;
+  filter: grayscale(0.2);
+}

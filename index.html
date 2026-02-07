@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Neon Relic Cracktro Launcher</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <canvas id="stage"></canvas>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+
+    <main class="hud">
+      <header class="logo">
+        <span class="logo__glow">NEON RELIC</span>
+        <span class="logo__sub">CRACKTRO LAUNCHER</span>
+      </header>
+
+      <section class="controls">
+        <button id="launch" class="launch">ENGAGE SEQUENCE</button>
+        <p class="hint">Audio + visuals sync after launch. Headphones recommended.</p>
+      </section>
+
+      <section class="status">
+        <div class="status__row">
+          <span class="status__label">SYS</span>
+          <span class="status__value" id="sys-status">STANDBY</span>
+        </div>
+        <div class="status__row">
+          <span class="status__label">CORE</span>
+          <span class="status__value" id="core-status">IDLE</span>
+        </div>
+        <div class="status__row">
+          <span class="status__label">SYNC</span>
+          <span class="status__value" id="sync-status">--</span>
+        </div>
+      </section>
+
+      <section class="credits">
+        <p>GFX: LUMIN &bull; SOUND: NOVA &bull; CODE: ORBIT</p>
+      </section>
+    </main>
+
+    <div class="scroll" id="scroll"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
